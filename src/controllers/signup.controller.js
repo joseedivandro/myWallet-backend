@@ -1,4 +1,4 @@
-import db from "../databse/database.connection";
+import db from "../databse/database.connection.js";
 import bcrypt from "bcrypt"
 
 
