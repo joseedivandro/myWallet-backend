@@ -4,19 +4,20 @@ import {v4 as uuid} from "uuid"
 
 
 export async function loginUser (req,res){
-    const { email, senha} = req.body
-    try{
-        const usuario = await db.collection("usuarios").findOne({email})
-        if(!usuario) return res.status(401).send("E-mail não cadastrado")
+    const { email, password } = req.body
 
-        const senhaEstaCorreta = bcrypt.compareSync(senha, usuario.senha)
-        if(!senhaEstaCorreta) return res.status(401).send("Senha incorreta!")
+  try {
+      const user = await db.collection("users").findOne({ email })
+      if (!user) return res.status(404).send("E-mail não cadastrado.")
 
-        const token = uuid()
-        await db.collection("sessoes").insertOne({token, idUsuario: usuario._id })
-        res.send(token)
+      const passwordIsCorrect = bcrypt.compareSync(password, user.password)
+      if (!passwordIsCorrect) return res.status(401).send("Senha incorreta")
 
-    }catch(err){
-        res.status(500).send(err.message)
-    }
+      const token = uuid();
+      await db.collection("sessions").insertOne({ token, email : user.email, name: user.name, idUser : user._id })
+      return res.status(200).send({token, idUser: user._id, name: user.name})
+
+  } catch (err) {
+      res.status(500).send(err.message)
+  }
 }

@@ -10,7 +10,7 @@ import { validateSchema } from "../middlewares/validataSchema.middleware.js";
 
 const userRouter = Router();
 
-userRouter.post("/sign-up", validateSchema(usuarioSchema),createUser )
+userRouter.post("/cadastro", validateSchema(usuarioSchema),createUser )
 
 userRouter.post("/sign-in", validateSchema(userLoginSchema), loginUser)
 
